@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kristo XII DPIB A</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            color: #222;
+            text-align: center;
+            padding: 50px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        p {
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            margin: 10px 0;
+        }
+
+        #typed {
+            font-weight: bold;
+            color: #003366;
+            border-right: 3px solid #003366;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(30px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Perkenalan</h1>
+    <p><b>Halo, Namaku Kristoforus Ananta Putra Magallan</b></p>
+    <p>Saya bersekolah di <span id="sekolah">SMKN 2 Wonogiri</span></p>
+    <p>Saya juga tinggal di <span id="alamat">Wonogiri</span></p>
+    <h2 id="typed"></h2>
+
+    <footer>✨ Dibuat dengan semangat dan kreativitas oleh Kristo ✨</footer>
+
+    <script>
+        // Efek ketik otomatis
+        const text = [
+            "Selamat datang di halaman pribadiku!",
+            "Aku suka mencari kode nuklir terbaru 🌟",
+            "Mari kita berkembang bersama!"
+        ];
+
+        let index = 0;
+        let charIndex = 0;
+        const typedElement = document.getElementById("typed");
+
+        function typeEffect() {
+            if (charIndex < text[index].length) {
+                typedElement.textContent += text[index].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 80);
+            } else {
+                setTimeout(eraseEffect, 2000);
+            }
+        }
+
+        function eraseEffect() {
+            if (charIndex > 0) {
+                typedElement.textContent = text[index].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(eraseEffect, 40);
+            } else {
+                index = (index + 1) % text.length;
+                setTimeout(typeEffect, 500);
+            }
+        }
+
+        typeEffect();
+    </script>
+</body>
+</html>
