@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kristo XII DPIB A</title>
     <style>
+                /* ======== STYLE DASAR ======== */
+        :root {
+            --bg-light: linear-gradient(135deg, #1ff8ff, #ec1414);
+            --bg-dark: linear-gradient(135deg, #141e30, #243b55);
+            --text-light: #222;
+            --text-dark: #fff;
+            --accent: #00ffff;
+        }
         body {
             font-family: "Poppins", sans-serif;
-            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            background: linear-gradient(135deg, #1ff8ff, #ec1414);
             color: #222;
             text-align: center;
             padding: 50px;
@@ -32,7 +40,7 @@
 
         #typed {
             font-weight: bold;
-            color: #003366;
+            color: #000000;
             border-right: 3px solid #003366;
             white-space: nowrap;
             overflow: hidden;
@@ -51,20 +59,21 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="toggleTheme">🌙 Mode Malam</button>
     <h1>Perkenalan</h1>
     <p><b>Halo, Namaku Kristoforus Ananta Putra Magallan</b></p>
     <p>Saya bersekolah di <span id="sekolah">SMKN 2 Wonogiri</span></p>
     <p>Saya juga tinggal di <span id="alamat">Wonogiri</span></p>
     <h2 id="typed"></h2>
 
-    <footer>✨ Dibuat dengan semangat dan kreativitas oleh Kristo ✨</footer>
+    <footer>Created with ❤️ by <href>kristoforusapm</href></footer>
 
     <script>
         // Efek ketik otomatis
         const text = [
-            "Selamat datang di halaman pribadiku!",
+            "Welcome to my web",
             "Aku suka mencari kode nuklir terbaru 🌟",
-            "Mari kita berkembang bersama!"
+            "Mari kita "
         ];
 
         let index = 0;
@@ -91,6 +100,16 @@
                 setTimeout(typeEffect, 500);
             }
         }
+        /* ======== MODE SIANG / MALAM ======== */
+        const toggle = document.getElementById("toggleTheme");
+        let dark = false;
+
+        toggle.addEventListener("click", () => {
+            dark = !dark;
+            document.body.style.background = dark ? "var(--bg-dark)" : "var(--bg-light)";
+            document.body.style.color = dark ? "var(--text-dark)" : "var(--text-light)";
+            toggle.textContent = dark ? "☀️ Mode Siang" : "🌙 Mode Malam";
+        });
 
         typeEffect();
     </script>
