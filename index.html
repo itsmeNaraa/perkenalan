@@ -56,17 +56,111 @@
             font-size: 0.9em;
             color: #fff;
         }
+         /* CHATBOX */
+    .chatbox {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    body.dark .chatbox {
+      background: #222;
+      border-color: #444;
+      color: white;
+    }
+    .chat-header {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-messages {
+      padding: 10px;
+      overflow-y: auto;
+      flex-grow: 1;
+      max-height: 250px;
+      text-align: left;
+    }
+    .chat-form {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    .chat-input {
+      flex-grow: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 0 0 0 10px;
+    }
+    .chat-send {
+      padding: 8px 15px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 0 0 10px 0;
+      cursor: pointer;
+    }
+    .chat-send:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      max-width: 80%;
+    }
+    .user {
+      background: #007bff;
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .bot {
+      background: #eee;
+      color: #333;
+      align-self: flex-start;
+    }
+    body.dark .bot {
+      background: #444;
+      color: #f0f0f0;
+    }
     </style>
 </head>
 <body>
     <button class="theme-toggle" id="toggleTheme">🌙 Mode Malam</button>
+    <button class="info-toggle" id="toggleInfo">Tekan saya</button>
     <h1>Perkenalan</h1>
     <p><b>Halo, Namaku Kristoforus Ananta Putra Magallan</b></p>
     <p>Saya bersekolah di <span id="sekolah">SMKN 2 Wonogiri</span></p>
     <p>Saya juga tinggal di <span id="alamat">Wonogiri</span></p>
     <h2 id="typed"></h2>
 
-    <footer>Created with ❤️ by <href>kristoforusapm</href></footer>
+      <!-- CHATBOX -->
+    <div class="chatbox" id="chatbox" aria-hidden="true">
+    <header class="chat-header">
+    <span>Chat</span>
+    <button id="closeChat" class="chat-close" aria-label="Tutup chat">✕</button>
+    </header>
+    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+    <form id="chatForm" class="chat-form" autocomplete="off">
+    <input id="chatInput" class="chat-input" type="text" placeholder="Ketik pesan..." />
+    <button type="submit" class="chat-send">Kirim</button>
+    </form>
+  </div>
+  <button id="openChat" class="open-chat" aria-expanded="false">💬 Chat</button>
+
+
+    <footer>Created with ❤️ by <a href="https://github.com/CEKIKOFGAMERS">kristoforusapm</a></footer>
 
     <script>
         // Efek ketik otomatis
@@ -79,6 +173,80 @@
         let index = 0;
         let charIndex = 0;
         const typedElement = document.getElementById("typed");
+
+        
+    function type() {
+      if (charIndex < text[index].length) {
+        typedElement.textContent += text[index].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, 100);
+      } else {
+        setTimeout(erase, 1500);
+      }
+    }
+    function erase() {
+      if (charIndex > 0) {
+        typedElement.textContent = text[index].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(erase, 50);
+      } else {
+        index = (index + 1) % text.length;
+        setTimeout(type, 500);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      if (text.length) type();
+    });
+
+    // 💬 Chatbox Interaktif
+    const chatbox = document.getElementById("chatbox");
+    const openChat = document.getElementById("openChat");
+    const closeChat = document.getElementById("closeChat");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatMessages = document.getElementById("chatMessages");
+
+    openChat.addEventListener("click", () => {
+      chatbox.style.display = "flex";
+      openChat.setAttribute("aria-expanded", "true");
+      chatbox.setAttribute("aria-hidden", "false");
+    });
+    closeChat.addEventListener("click", () => {
+      chatbox.style.display = "none";
+      openChat.setAttribute("aria-expanded", "false");
+      chatbox.setAttribute("aria-hidden", "true");
+    });
+
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = chatInput.value.trim();
+      if (msg === "") return;
+
+      addMessage(msg, "user");
+      chatInput.value = "";
+
+      setTimeout(() => {
+        const reply = getBotReply(msg);
+        addMessage(reply, "bot");
+      }, 700);
+    });
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.classList.add("message", sender);
+      div.textContent = text;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getBotReply(msg) {
+      msg = msg.toLowerCase();
+      if (msg.includes("halo")) return "Halo juga! 👋";
+      if (msg.includes("nama")) return "Namaku ChatBot kecil buatan Kristo 😄";
+      if (msg.includes("sekolah")) return "Kamu sekolah di SMKN 2 Wonogiri ya? Hebat!";
+      if (msg.includes("apa kabar")) return "Aku baik, terima kasih! Kamu?";
+      return "Hmm... aku belum mengerti maksudmu 🤔";
+    }
 
         function typeEffect() {
             if (charIndex < text[index].length) {
@@ -102,13 +270,19 @@
         }
         /* ======== MODE SIANG / MALAM ======== */
         const toggle = document.getElementById("toggleTheme");
+        const togel = document.getElementById("toggleInfo");
         let dark = false;
+        let info = false;
 
         toggle.addEventListener("click", () => {
             dark = !dark;
             document.body.style.background = dark ? "var(--bg-dark)" : "var(--bg-light)";
             document.body.style.color = dark ? "var(--text-dark)" : "var(--text-light)";
             toggle.textContent = dark ? "☀️ Mode Siang" : "🌙 Mode Malam";
+        });
+        togel.addEventListener("click", () => {
+            info = !info;
+            console.log("Halo");
         });
 
         typeEffect();
